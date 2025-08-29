@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University ID Card Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .id-card {
+            width: 540px;
+            height: 324px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+        #photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; 
+        }
+    </style>
+</head>
+<body class="bg-gray-800 flex flex-col items-center justify-center min-h-screen py-12 px-4">
+
+    <!-- ID Card -->
+    <div id="cardFront" class="id-card bg-slate-900 text-white p-6 flex flex-col justify-between rounded-lg mb-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b-2 border-green-500 pb-2">
+            <div class="flex items-center">
+                <!-- University Logo -->
+                <img id="cardLogo" src="https://kiit.ac.in/wp-content/uploads/2023/02/KIIT-logo-HD.png" alt="University Logo" class="w-16 h-16 mr-4 object-contain">
+                <div>
+                    <h1 class="text-xl font-bold text-green-500">KALINGA INSTITUTE OF INDUSTRIAL TECHNOLOGY</h1>
+                    <p class="text-sm text-gray-300">Deemed to be University</p>
+                    <p class="text-xs text-gray-400">(Established U/S 3 of UGC Act, 1956)</p>
+                    <p class="text-xs text-gray-400">(Bhubaneswar, Odisha, India)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex items-start space-x-6 mt-2">
+            <!-- Student Photo -->
+            <div class="w-32 h-40 bg-gray-700 border-2 border-gray-600 rounded-md flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div id="photo-container" class="w-full h-full flex items-center justify-center">
+                    <svg class="w-24 h-24 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                </div>
+            </div>
+            <input type="file" id="imageUploader" accept="image/*" class="hidden">
+            <input type="file" id="logoUploader" accept="image/*" class="hidden">
+            
+            <!-- Student Details -->
+            <div class="flex-1 text-left min-w-0">
+                <div class="text-center mb-2">
+                    <!-- <h2 class="text-2xl font-bold font-orbitron" id="cardName">KABIR IYER</h2> -->
+                    <p class="text-red-500 font-semibold" id="cardYear">2024-2025</p>
+                </div>
+                <!-- This grid is updated for better spacing -->
+                <div class="grid grid-cols-[max-content_auto_1fr] gap-x-3 text-sm">
+
+                    <span class="font-semibold text-gray-400">Full name</span><span class="font-bold text-gray-400">:</span><span id="cardName" class="font-mono text-white break-words"></span>
+                    <span class="font-semibold text-gray-400">Course</span><span class="font-bold text-gray-400">:</span><span id="cardCourse" class="font-mono text-white break-words">LLB</span>
+                    <span class="font-semibold text-gray-400">Branch</span><span class="font-bold text-gray-400">:</span><span id="cardBranch" class="font-mono text-white break-words">Literature - 4th-YEAR</span>
+                    <span class="font-semibold text-gray-400">Roll No</span><span class="font-bold text-gray-400">:</span><span id="cardRollNo" class="font-mono text-white break-words">135</span>
+                    <span class="font-semibold text-gray-400">Student No</span><span class="font-bold text-gray-400">:</span><span id="cardStudentNo" class="font-mono text-white break-words">2499137129</span>
+                    <span class="font-semibold text-gray-400">DOB</span><span class="font-bold text-gray-400">:</span><span id="cardDob" class="font-mono text-white break-words">2-July-2004</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Form -->
+    <div class="w-full max-w-2xl bg-slate-900 p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold mb-4 text-center border-b pb-2 text-green-500">Student Details Input</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Column 1 -->
+            <div>
+                <label for="inputName" class="block text-green-500 text-sm font-bold mb-2">Full Name</label>
+                <input type="text" id="inputName" placeholder="e.g., Kabir Iyer" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline placeholder-gray-500">
+                <label for="inputCourse" class="block text-green-500 text-sm font-bold mb-2 mt-4">Course</label>
+                <input type="text" id="inputCourse" placeholder="e.g., LLB" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline placeholder-gray-500">
+            </div>
+            <!-- Column 2 -->
+            <div>
+                <label for="inputBranch" class="block text-green-500 text-sm font-bold mb-2">Branch & Year</label>
+                <input type="text" id="inputBranch" placeholder="e.g., Literature - 4th-YEAR" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline placeholder-gray-500">
+                <label for="inputRollNo" class="block text-green-500 text-sm font-bold mb-2 mt-4">Roll No</label>
+                <input type="text" id="inputRollNo" placeholder="e.g., 135" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline placeholder-gray-500">
+            </div>
+            <!-- Column 3 -->
+            <div>
+                <label for="inputStudentNo" class="block text-green-500 text-sm font-bold mb-2">Student No</label>
+                <input type="text" id="inputStudentNo" placeholder="e.g., 2499137129" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline placeholder-gray-500">
+                <label for="inputDob" class="block text-green-500 text-sm font-bold mb-2 mt-4">Date of Birth</label>
+                <input type="date" id="inputDob" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="lg:col-span-3">
+                <label for="inputEmail" class="block text-green-500 text-sm font-bold mb-2">University Email</label>
+                <input type="text" id="inputEmail" placeholder="e.g., 21BCS1234@cuchd.in" class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 bg-gray-700 text-white leading-tight focus:outline-none focus:shadow-outline placeholder-gray-500">
+            </div>
+        </div>
+        <!-- Action Buttons -->
+        <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2">
+             <button id="uploadLogoBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors duration-300">Upload Logo</button>
+             <button id="uploadBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors duration-300">Upload Photo</button>
+             <button id="generateBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors duration-300">Generate All</button>
+        </div>
+        <div class="mt-2 grid grid-cols-2 gap-2">
+             <button id="updateBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors duration-300">Update Card</button>
+             <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full transition-colors duration-300">Download Card</button>
+        </div>
+        <div class="mt-4 text-center">
+            <button id="resetBtn" class="text-xs text-gray-500 hover:text-gray-400 underline">Reset Name History</button>
+        </div>
+    </div>
+
+    <script>
+        // Get references to elements
+        const photoContainer = document.getElementById('photo-container');
+        const imageUploader = document.getElementById('imageUploader');
+        const logoUploader = document.getElementById('logoUploader');
+        const cardLogo = document.getElementById('cardLogo');
+        
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadLogoBtn = document.getElementById('uploadLogoBtn');
+        const updateBtn = document.getElementById('updateBtn');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const inputName = document.getElementById('inputName');
+        const inputCourse = document.getElementById('inputCourse');
+        const inputBranch = document.getElementById('inputBranch');
+        const inputRollNo = document.getElementById('inputRollNo');
+        const inputStudentNo = document.getElementById('inputStudentNo');
+        const inputDob = document.getElementById('inputDob');
+        const inputEmail = document.getElementById('inputEmail');
+
+        const cardName = document.getElementById('cardName');
+        const cardCourse = document.getElementById('cardCourse');
+        const cardBranch = document.getElementById('cardBranch');
+        const cardRollNo = document.getElementById('cardRollNo');
+        const cardStudentNo = document.getElementById('cardStudentNo');
+        const cardDob = document.getElementById('cardDob');
+        const cardYear = document.getElementById('cardYear');
+
+        let usedNames = JSON.parse(localStorage.getItem('usedUniversityNames')) || [];
+
+        // Logo Uploader
+        uploadLogoBtn.addEventListener('click', () => logoUploader.click());
+        logoUploader.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    cardLogo.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Photo Uploader
+        uploadBtn.addEventListener('click', () => imageUploader.click());
+        imageUploader.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    photoContainer.innerHTML = '';
+                    photoContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Update Card Function
+        function updateCard() {
+            cardName.textContent = inputName.value.toUpperCase() || 'STUDENT NAME';
+            cardCourse.textContent = inputCourse.value || 'N/A';
+            cardBranch.textContent = inputBranch.value || 'N/A';
+            cardRollNo.textContent = inputRollNo.value || 'N/A';
+            cardStudentNo.textContent = inputStudentNo.value || 'N/A';
+            
+            if (inputDob.value) {
+                const date = new Date(inputDob.value);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                cardDob.textContent = date.toLocaleDateString('en-GB', options).replace(/ /g, '-');
+            } else {
+                cardDob.textContent = 'N/A';
+            }
+            
+            const currentYear = new Date().getFullYear();
+            cardYear.textContent = `${currentYear}-${currentYear + 1}`;
+        }
+        updateBtn.addEventListener('click', updateCard);
+
+        // Generate All Random Data
+        generateBtn.addEventListener('click', () => {
+            const firstNames = ['Aarav','Aaryan','Abdul','Abdullah','Abhay','Abhimanyu','Abhinav','Abhishek','Adarsh','Aditya','Advait','Advik','Agastya','Ajay','Ajit','Akash','Akhil','Akshay','Akshat','Amar','Amir','Amit','Anand','Anil','Anirudh','Anish','Ankit','Ankur','Anmol','Ansh','Anshul','Anuj','Anupam','Arav','Arihant','Arjun','Armaan','Arnav','Arush','Aryan','Ashish','Ashok','Ashwin','Atharv','Atul','Avi','Avinash','Ayaan','Ayan','Ayush','Bhargav','Bhaskar','Bhuvan','Chaitanya','Chetan','Chirag','Darshan','Deepak','Dev','Devansh','Dhairya','Dhanush','Dharmesh','Dhruv','Divit','Divyansh','Ekansh','Gagan','Ganesh','Gaurav','Gautam','Girish','Gopal','Harish','Harsh','Harshad','Hemant','Himanshu','Hitesh','Hrithik','Ibrahim','Imran','Indrajit','Ishan','Ishaan','Ishant','Jagdish','Jai','Jaideep','Jash','Jatin','Jay','Jayesh','Jignesh','Jitendra','Kabir','Kailash','Kalpesh','Kamal','Karan','Kartik','Kaushal','Kavin','Kian','Kiran','Krish','Krishna','Kunal','Kush','Laksh','Lokesh','Madhav','Manan','Mandeep','Manish','Manoj','Manthan','Mayank','Mayur','Meet','Mihir','Milan','Milind','Mohammad','Mohammed','Mohan','Mohit','Mukesh','Nakul','Naman','Nandan','Naresh','Naveen','Neel','Nikhil','Nikunj','Niraj','Nirav','Nishant','Nitin','Ojas','Om','Pankaj','Parth','Pavan','Piyush','Pranav','Pranay','Prasad','Prashant','Prateek','Pratham','Praveen','Prem','Prithvi','Puneet','Pushkar','Rahul','Raj','Rajan','Rajat','Rajeev','Rajesh','Rakesh','Raman','Ramesh','Ranbir','Ranjan','Ravi','Reyansh','Rishi','Rishikesh','Ritesh','Ritvik','Rohan','Rohit','Ronak','Roshan','Rudra','Rushikesh','Sachin','Sagar','Sahil','Sai','Sainath','Samar','Sameer','Samir','Sandeep','Sanjay','Sanket','Sarvesh','Sathvik','Saurabh','Shaurya','Shikhar','Shiva','Shivam','Shreyas','Shubham','Siddharth','Soham','Sohan','Somesh','Subhash','Sudhir','Sujal','Sumit','Sundar','Sunil','Suraj','Suresh','Sushant','Swapnil','Swaraj','Tanay','Tanmay','Tanveer','Tarun','Tejas','Tushar','Uday','Ujjwal','Umang','Umesh','Utkarsh','Vaibhav','Varun','Vatsal','Ved','Vedant','Veer','Vibhor','Vidit','Vidyut','Vihaan','Vikas','Vikram','Vimal','Vinay','Vineet','Vinit','Vipul','Vishal','Vishnu','Vivek','Yash','Yashwant','Yogesh','Yuvraj','Aadhya','Aaditri','Aahana','Aalia','Aanya','Aaradhya','Aarohi','Aashi','Aashvi','Aayushi','Aditi','Advika','Aisha','Akshara','Alia','Amaira','Amrita','Anaisha','Anamika','Ananya','Angel','Anika','Anisha','Anita','Anjali','Ankita','Annapurna','Anshika','Anu','Anushka','Anvi','Aparna','Aradhana','Archana','Arpita','Arunima','Arya','Asha','Ashwini','Asmita','Avani','Avantika','Avni','Ayushi','Bhavana','Bhavya','Bhumika','Chaitali','Chaitra','Chandni','Charu','Charvi','Chetna','Damini','Darshana','Deepa','Deepali','Deepika','Deepti','Devanshi','Devika','Dhanashri','Dhriti','Diksha','Divya','Diya','Drishti','Durga','Eesha','Esha','Eva','Fatima','Gargi','Garima','Gauri','Gayatri','Geeta','Geetika','Gina','Gitanjali','Greeshma','Gunjan','Harini','Haripriya','Harshita','Heena','Hema','Himani','Hina','Indira','Indu','Inaaya','Ira','Isha','Ishani','Ishika','Ishita','Jagruti','Jahnavi','Janani','Janhavi','Janki','Jasmine','Jasmin','Jaya','Jayashri','Jiya','Juhi','Jyoti','Jyotsna','Kajal','Kalpana','Kalyani','Kamala','Kamini','Kanchan','Kanishka','Kareena','Karishma','Karthika','Kashish','Kasturi','Kaushiki','Kavita','Kavya','Khushi','Kiara','Kiran','Kirti','Komal','Koyal','Krisha','Krishika','Kriti','Kritika','Kshama','Kumari','Kumud','Kusum','Lakshmi','Lalita','Lata','Lavanya','Leela','Lekha','Likhita','Lina','Lipika','Madhubala','Madhavi','Madhu','Madhulika','Madhuri','Mahalakshmi','Mahek','Mahi','Mahima','Mala','Malini','Malti','Mamta','Manali','Manasa','Mansi','Manisha','Manju','Manjusha','Manorama','Manya','Mayuri','Meena','Meenakshi','Meera','Megha','Meghana','Mehak','Mihika','Mili','Minal','Minakshi','Mira','Mitali','Mithila','Mohini','Mona','Monalisa','Monica','Mounika','Mridula','Mrinalini','Mugdha','Mukta','Muskan','Myra','Naina','Nalini','Namita','Namrata','Nandini','Nandita','Navya','Neha','Nehal','Nidhi','Niharika','Nikita','Nila','Nilam','Nilima','Nirali','Nirmala','Nisha','Nishita','Nita','Nitya','Nivedita','Nupur','Nutan','Padma','Padmaja','Pallavi','Pankaja','Pari','Paridhi','Parineeta','Parnika','Parul','Parvati','Payal','Pooja','Poonam','Prachi','Pradnya','Pragya','Prakriti','Pramila','Pranali','Pranavi','Prarthana','Pratibha','Pratima','Preeti','Prerna','Prisha','Prita','Priti','Priya','Priyadarshini','Priyanka','Puja','Punam','Purnima','Purva','Pushpa','Rachana','Rachita','Radha','Radhika','Ragini','Rajalakshmi','Rajani','Rajeshwari','Rajkumari','Rakhi','Raksha','Ramya','Rani','Ranjana','Ranjita','Rashmi','Rashmika','Rasika','Ratna','Rekha','Renu','Renuka','Revathi','Richa','Riddhi','Rima','Rina','Rinki','Rishika','Rishita','Rita','Ritu','Riya','Roshni','Rubi','Ruchi','Ruchika','Ruchita','Rudrani','Rukmini','Rupa','Rupali','Sabita','Sadhana','Sagarika','Sahana','Saheli','Saina','Sajani','Sakshi','Saloni','Samiksha','Samriddhi','Sana','Sanchita','Sandhya','Sangita','Sanjana','Sanjivani','Sanjukta','Sanskriti','Santoshi','Saanvi','Sapna','Sara','Sarika','Sarita','Sarla','Saroj','Saroja','Sasmita','Sathvika','Satyavati','Saumya','Savita','Savitri','Seema','Shaila','Shailaja','Shaili','Shalini','Shambhavi','Shamita','Shanaya','Shanti','Sharada','Sharanya','Sharmila','Sharmistha','Shashi','Shashikala','Sheela','Sheetal','Shefali','Shikha','Shilpa','Shirin','Shirisha','Shivani','Shivangi','Shobha','Shraddha','Shravani','Shravanti','Shree','Shreya','Shridevi','Shrishti','Shruti','Shubha','Shubhangi','Shubhi','Shweta','Shyama','Siddhi','Simi','Simran','Sindhu','Smita','Smriti','Sneha','Snehal','Soha','Soma','Sona','Sonakshi','Sonal','Sonali','Soni','Sonia','Sonu','Soumya','Sowmya','Sravani','Srishti','Subhadra','Subhashini','Subhashree','Sucharita','Suchitra','Sudeepa','Sudha','Sudipta','Sugandha','Suhani','Suhasini','Sujata','Sukanya','Sulabha','Sulochana','Suma','Sumalatha','Suman','Sumitra','Sunaina','Sunanda','Sunayana','Sundari','Sunidhi','Sunita','Supriya','Surabhi','Surekha','Sushila','Sushma','Sushmita','Swapna','Swapnali','Swara','Swarnalata','Swati','Sweta','Tanaya','Tanisha','Tanishka','Tanmayi','Tanu','Tanuja','Tanushree','Tanvi','Tanya','Tara','Tarini','Tejal','Tejaswini','Trisha','Tripti','Trishna','Tulasi','Uma','Upasana','Urmila','Urvi','Usha','Ushasri','Utkarsha','Vaibhavi','Vaidehi','Vaishali','Vaishnavi','Vandana','Vani','Vanita','Varalakshmi','Varsha','Varshini','Varuni','Vasudha','Vasundhara','Veda','Vedika','Veena','Vidhi','Vidya','Vidyullatha','Vijaya','Vijayalakshmi','Vimala','Vinaya','Vineeta','Vinita','Vinutha','Vipula','Vishakha','Yamini','Yashaswini','Yashoda','Yogita','Zara'];
+            const lastNames = ['Sharma', 'Verma', 'Gupta', 'Singh', 'Kumar', 'Patel', 'Shah', 'Khan', 'Reddy', 'Jain', 'Agarwal', 'Mishra', 'Yadav', 'Das', 'Mehta', 'Roy', 'Nair', 'Iyer', 'Menon', 'Joshi', 'Malhotra', 'Bose', 'Rao', 'Desai', 'Pillai', 'Bhat', 'Shetty', 'Narayan', 'Murthy', 'Prasad', 'Soni', 'Trivedi', 'Pandey', 'Chauhan', 'Rathore', 'Solanki', 'Pawar', 'Gaikwad', 'Jadhav', 'Patil', 'Naidu', 'Kapoor', 'Khanna', 'Mehra', 'Oberoi', 'Bajaj', 'Chawla', 'Bedi', 'Sodhi', 'Ahluwalia', 'Walia', 'Gill', 'Dhillon', 'Sidhu', 'Brar', 'Grewal', 'Sandhu', 'Kulkarni', 'Deshpande', 'Hegde', 'Kamath', 'Shenoy', 'Pai', 'Prabhu', 'Nayak', 'Bhandari', 'Sawant', 'Shinde', 'More', 'Chavan', 'Kadam', 'Bhosle', 'Kale', 'Jagtap', 'Tambe', 'Apte', 'Gokhale', 'Limaye', 'Phadke', 'Inamdar', 'Deshmukh', 'Srivastava', 'Dubey', 'Tiwari', 'Shukla', 'Chatterjee', 'Banerjee', 'Mukherjee', 'Dutta', 'Ganguly', 'Sarkar', 'Basu', 'Majumdar', 'Thakur', 'Goswami', 'Barua', 'Saikia', 'Kalita', 'Hazarika', 'Bora', 'Choudhury', 'Biswas', 'Ghosh', 'Saha', 'Kar', 'Nandi', 'Paul', 'Debnath', 'Chakraborty', 'Bhattacharya'];
+            const courses = ['B.Tech', 'BBA', 'MBA', 'B.Sc', 'LLB', 'M.Tech', 'Ph.D', 'B.Com', 'M.Com', 'BCA', 'MCA', 'B.A.', 'M.A.'];
+            const branches = ['CSE - 2nd-YEAR', 'ECE - 3rd-YEAR', 'Mechanical - 1st-YEAR', 'Civil - 4th-YEAR', 'Finance - 2nd-YEAR', 'IT - 1st-YEAR', 'Biotech - 3rd-YEAR', 'Marketing - 1st-YEAR', 'Physics - 2nd-YEAR', 'Chemistry - 4th-YEAR', 'English - 3rd-YEAR', 'History - 1st-YEAR'];
+            
+            if (usedNames.length >= firstNames.length * lastNames.length) {
+                console.log("All name combinations have been used!");
+                generateBtn.disabled = true;
+                generateBtn.textContent = "All Names Used";
+                return;
+            }
+
+            let randomName;
+            do {
+                const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                randomName = `${randomFirstName} ${randomLastName}`;
+            } while (usedNames.includes(randomName));
+            
+            usedNames.push(randomName);
+            localStorage.setItem('usedUniversityNames', JSON.stringify(usedNames));
+
+            inputName.value = randomName.toUpperCase();
+            inputCourse.value = courses[Math.floor(Math.random() * courses.length)];
+            inputBranch.value = branches[Math.floor(Math.random() * branches.length)];
+            inputRollNo.value = Math.floor(Math.random() * 200) + 1;
+            inputStudentNo.value = Math.floor(Math.random() * 9000000000) + 1000000000;
+            
+            const dob = new Date();
+            dob.setFullYear(dob.getFullYear() - (Math.floor(Math.random() * 6) + 18));
+            dob.setDate(Math.floor(Math.random() * 28) + 1);
+            dob.setMonth(Math.floor(Math.random() * 12));
+            inputDob.value = dob.toISOString().split('T')[0];
+            
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            inputEmail.value = `21BCS${randomNum}@cuchd.in`;
+
+            updateCard();
+        });
+
+        // Reset history button logic
+        resetBtn.addEventListener('click', () => {
+            usedNames = [];
+            localStorage.removeItem('usedUniversityNames');
+            generateBtn.disabled = false;
+            generateBtn.textContent = "Generate All";
+            console.log("Used names history has been reset.");
+            resetBtn.textContent = "History Cleared!";
+            setTimeout(() => {
+                resetBtn.textContent = "Reset Name History";
+            }, 1500);
+        });
+
+        // Download Function
+        downloadBtn.addEventListener('click', () => {
+            html2canvas(document.getElementById('cardFront'), { scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'university-id-card.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+    </script>
+</body>
+</html>
